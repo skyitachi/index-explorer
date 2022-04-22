@@ -34,10 +34,14 @@ public:
                        D, SF, F, DOC, CF, Ver, CC);
   }
 };
+=======
+#include <string>
+>>>>>>> 6814a35 (sync code)
 
 class Segment {
 
 public:
+<<<<<<< HEAD
   bool Open(const std::string &path);
   const Footer &parseFooter();
   bool loadFields();
