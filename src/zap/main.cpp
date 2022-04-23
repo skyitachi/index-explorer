@@ -1,13 +1,14 @@
 #include <iostream>
-#include <folly/FBString.h>
-#include <folly/FileUtil.h>
-#include <vector>
+#include "segment.h"
 
 int main() {
-  std::cout << "hello zap" << std::endl;
-  folly::fbstring str1 = "hello world";
-  folly::ByteRange range;
-  std::vector<uint8_t> index_content;
-  
-  std::cout << str1 << std::endl;
+  Segment seg_{};
+  bool is_success = seg_.Open("/Users/skyitachi/lab/index-explorer/cmake_build/src/000000000002.zap");
+
+  if (is_success) {
+    const Footer& footer = seg_.parseFooter();
+    std::cout << footer.describe() << std::endl;
+    return 0;
+  }
+  std::cout << "open failed" << std::endl;
 }
