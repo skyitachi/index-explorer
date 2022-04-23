@@ -1,5 +1,10 @@
-#include "segment.h"
+#include <bitset>
 #include <iostream>
+
+#include "coding.h"
+#include "segment.h"
+
+using namespace zap;
 
 int main() {
   Segment seg_{};
@@ -9,7 +14,9 @@ int main() {
   if (is_success) {
     const Footer &footer = seg_.parseFooter();
     std::cout << footer.describe() << std::endl;
-    return 0;
   }
-  std::cout << "open failed" << std::endl;
+
+  if (!seg_.loadFields()) {
+    std::cout << "load fields failed" << std::endl;
+  }
 }

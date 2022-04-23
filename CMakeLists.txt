@@ -64,4 +64,7 @@ add_custom_target(check-clang-tidy
 	-p ${CMAKE_BINARY_DIR}                                            # using cmake's generated compile commands
 	)
 
-# add_dependencies(check-clang-tidy gtest)   
+# test
+find_package(gtest REQUIRED)
+
+add_subdirectory(test)

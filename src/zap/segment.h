@@ -1,7 +1,21 @@
+#ifndef ZAP_INCLUDE_SEGMENT_H_
+#define ZAP_INCLUDE_SEGMENT_H_
+
 #include <string>
+#include <unordered_map>
+#include <vector>
+
+#include <stdint.h>
 #include <sys/mman.h>
 
 #include <fmt/format.h>
+
+#include "commons.h"
+
+namespace zap {
+
+const int KFooterSize = 4 + 4 + 4 + 8 + 8 + 8 + 8;
+using Byte = unsigned char;
 
 struct Footer {
   uint64_t D;   // Number of Docs
@@ -26,6 +40,7 @@ class Segment {
 public:
   bool Open(const std::string &path);
   const Footer &parseFooter();
+  bool loadFields();
 
   ~Segment() {
     if (is_opened_) {
@@ -38,4 +53,11 @@ private:
   size_t sz_;
   char *data_ = nullptr;
   Footer footer_;
+  std::unordered_map<std::string, uint16_t> fieldsMap;
+  std::vector<std::string> fieldsInv;
+  std::vector<uint64_t> dictLocs;
 };
+
+} // namespace zap
+
+#endif

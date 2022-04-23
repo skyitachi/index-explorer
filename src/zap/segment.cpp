@@ -5,9 +5,12 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#include "coding.h"
 #include "segment.h"
+#include "slice.h"
 #include "utils.h"
 
+namespace zap {
 bool Segment::Open(const std::string &path) {
   if (is_opened_) {
     fprintf(stderr, "already opened");
@@ -59,3 +62,34 @@ const Footer &Segment::parseFooter() {
 
   return footer_;
 }
+
+bool Segment::loadFields() {
+  assert(is_opened_);
+  uint64_t fieldsIndexEnd = sz_ - KFooterSize;
+  uint64_t fieldID = 0;
+  uint64_t offset = footer_.F + 8 * fieldID;
+  while (offset < fieldsIndexEnd) {
+    uint64_t addr = readUInt64(data_, offset);
+    Slice *slice_ = new Slice(data_ + addr, fieldsIndexEnd - addr);
+    uint64_t dictLoc;
+    bool is_success = GetVarint64(slice_, &dictLoc);
+    if (!is_success) {
+      return false;
+    }
+    dictLocs.push_back(dictLoc);
+    uint64_t nameLen;
+    is_success = GetVarint64(slice_, &nameLen);
+    if (!is_success) {
+      return false;
+    }
+    std::string name(slice_->data(), nameLen);
+    fieldsInv.push_back(name);
+    fieldsMap[name] = uint16_t(fieldID + 1);
+    fieldID++;
+    offset = footer_.F + 8 * fieldID;
+    delete slice_;
+  }
+  return true;
+}
+
+} // namespace zap
