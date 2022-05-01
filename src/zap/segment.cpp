@@ -33,6 +33,7 @@ bool Segment::Open(const std::string &path) {
   if ((src = mmap(0, sz_, PROT_READ, MAP_SHARED, fd, 0)) == MAP_FAILED) {
     fprintf(stderr, "mmap file error");
   }
+  // TODO: 需要拷贝吗
   data_ = (char *)src;
   return true;
 }

@@ -8,7 +8,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 include_directories("/usr/local/include")
 link_directories("/usr/local/lib")
 
-add_subdirectory(src)
 
 # clang format
 set(INDEXER_BUILD_SUPPORT_DIR "${CMAKE_SOURCE_DIR}/build_support")
@@ -68,3 +67,4 @@ add_custom_target(check-clang-tidy
 find_package(gtest REQUIRED)
 
 add_subdirectory(test)
+add_subdirectory(src)
