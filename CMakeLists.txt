@@ -2,7 +2,7 @@ project(index-explorer)
 
 cmake_minimum_required(VERSION 3.15)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include_directories("/usr/local/include")
@@ -64,7 +64,9 @@ add_custom_target(check-clang-tidy
 	)
 
 # test
-find_package(gtest REQUIRED)
+find_package(GTest REQUIRED)
+if (GTest_FOUND)
+  add_subdirectory(test)
+endif ()
 
-add_subdirectory(test)
 add_subdirectory(src)
