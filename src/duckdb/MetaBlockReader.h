@@ -13,27 +13,34 @@
 namespace explorer {
   namespace duckdb {
 
-    class File: public Deserializer {
+    class File : public Deserializer {
     public:
-      explicit File(int fd): fd_(fd), offset_(0) {}
-      File(int fd, idx_t off): fd_(fd), offset_(off) {}
-      explicit File(const std::string& file_path);
+      explicit File(int fd) : fd_(fd), offset_(0) {}
+
+      File(int fd, idx_t off) : fd_(fd), offset_(off) {}
+
+      explicit File(const std::string &file_path);
+
       ~File() {
         if (fd_ > 0) {
           ::close(fd_);
         }
       }
+
       int FD() {
         return fd_;
       }
 
       idx_t Read(data_ptr_t data, idx_t size);
+
       idx_t Read(data_ptr_t data, idx_t size, idx_t offset);
+
       void ReadData(data_ptr_t buffer, idx_t read_size) override;
 
       void seek(idx_t offset) {
         offset_ = offset;
       }
+
     private:
       int fd_;
       idx_t offset_;
@@ -62,7 +69,7 @@ namespace explorer {
 
       static const char MAGIC_BYTES[];
 
-      static void CheckMagicBytes(File& file);
+      static void CheckMagicBytes(File &file);
     };
 
     struct DatabaseHeader {
@@ -75,7 +82,7 @@ namespace explorer {
       //! block_count any blocks appearing AFTER block_count are implicitly part of the free_list.
       uint64_t block_count;
 
-      static DatabaseHeader ReadDatabaseHeader(Deserializer&);
+      static DatabaseHeader ReadDatabaseHeader(Deserializer &);
     };
 
 
@@ -85,7 +92,7 @@ namespace explorer {
   class MetaBlockReader {
 
   public:
-    void ReadData(data_ptr_t* dst, idx_t size);
+    void ReadData(data_ptr_t *dst, idx_t size);
   };
 }
 
