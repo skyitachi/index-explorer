@@ -31,5 +31,15 @@ int main(int argc, char** argv) {
             << ", meta_block_id: " << h2.meta_block
             << ", free_list: " << h2.free_list
             << ", block_count: " << h2.block_count << std::endl;
+
+  file.seek(Storage::BLOCK_START + header.meta_block * Storage::BLOCK_ALLOC_SIZE);
+  SchemaBlock schema_block = SchemaBlock::Read(file);
+
+  std::cout << "schema_count: " << schema_block.schema_count << std::endl;
+  for(const auto &schema: schema_block.schemas) {
+    std::cout <<  ", schema_name: " << schema.schema_name <<
+                  ", table_count: " << schema.table_count << std::endl;
+  }
+
   return 0;
 }
