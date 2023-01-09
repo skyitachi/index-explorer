@@ -160,6 +160,21 @@ namespace explorer {
       static TypeInfo ReadTypeInfo(Deserializer&);
     };
 
+    struct ColumnDefinition {
+
+    };
+    struct ColumnList {};
+
+    struct Constraint {};
+
+    struct TableInfo {
+      std::string schema;
+      std::string table;
+      ColumnList columns;
+      std::vector<Constraint> constraints;
+
+      static TableInfo Read(Deserializer&);
+    };
     struct Schema {
       uint32_t max_field_count;
       uint64_t total_size;

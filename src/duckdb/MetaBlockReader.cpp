@@ -114,6 +114,7 @@ ExtraTypeInfo ExtraTypeInfo::Read(Deserializer &deserializer) {
       break;
 
     }
+    // TODO
 //    case ExtraTypeInfoType::USER_TYPE_INFO:
 //      extra_info = UserTypeInfo::Deserialize(reader);
 //      break;
@@ -152,6 +153,11 @@ TypeInfo TypeInfo::ReadTypeInfo(Deserializer &deserializer) {
   info.name = deserializer.Read<std::string>();
   ReadFieldHeader(deserializer);
   info.type = deserializer.Read<LogicalTypeId>();
+  // Extra Type Field
+//  deserializer.Read<ExtraTypeInfoType>();
+  ExtraTypeInfo::Read(deserializer);
+
+
 }
 
 Schema Schema::Read(Deserializer &deserializer) {
@@ -164,6 +170,15 @@ Schema Schema::Read(Deserializer &deserializer) {
   schema.enum_count = deserializer.Read<uint32_t>();
   schema.seq_count = deserializer.Read<uint32_t>();
   schema.table_count = deserializer.Read<uint32_t>();
+  schema.view_count = deserializer.Read<uint32_t>();
+  schema.macro_count = deserializer.Read<uint32_t>();
+  schema.table_macro_count = deserializer.Read<uint32_t>();
+  schema.table_index_count = deserializer.Read<uint32_t>();
+
+  for (uint32_t i = 0; i < schema.enum_count; i++) {
+    schema.types.push_back(std::move(TypeInfo::ReadTypeInfo(deserializer)));
+  }
+
   return schema;
 }
 
